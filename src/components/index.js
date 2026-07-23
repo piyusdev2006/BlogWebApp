@@ -12,6 +12,10 @@ import Login from './Login.jsx'
 import PostCard from './PostCard.jsx'
 import PostForm from './post-form/PostForm.jsx'
 import Protected from './AuthLayout.jsx'
+import SearchModal from './SearchModal.jsx'
+import DocsSidebar from './DocsSidebar.jsx'
+import OnThisPage from './OnThisPage.jsx'
+import DocFooterNav from './DocFooterNav.jsx'
 
 export {
     Header,
@@ -27,5 +31,9 @@ export {
     Login,
     PostCard,
     PostForm, 
-    Protected
+    Protected,
+    SearchModal,
+    DocsSidebar,
+    OnThisPage,
+    DocFooterNav
 };
