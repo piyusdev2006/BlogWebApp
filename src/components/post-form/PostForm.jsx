@@ -85,18 +85,17 @@ export default function PostForm({ post }) {
     : null;
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
+    <form onSubmit={handleSubmit(submit)} className="flex flex-col lg:flex-row gap-6 page-enter">
+      {/* Main content — left */}
+      <div className="flex-1 space-y-5">
         <Input
-          label="Title :"
-          placeholder="Title"
-          className="mb-4"
+          label="Title"
+          placeholder="Enter your post title..."
           {...register("title", { required: true })}
         />
         <Input
-          label="Slug :"
-          placeholder="Slug"
-          className="mb-4"
+          label="Slug"
+          placeholder="auto-generated-slug"
           {...register("slug", { required: true })}
           onInput={(e) => {
             setValue("slug", slugTransform(e.currentTarget.value), {
@@ -105,47 +104,55 @@ export default function PostForm({ post }) {
           }}
         />
         <RTE
-          label="Content :"
+          label="Content"
           name="content"
           control={control}
           defaultValue={getValues("content")}
         />
       </div>
-      <div className="w-1/3 px-2">
-        <Input
-          label="Featured Image :"
-          type="file"
-          className="mb-4"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image")}
-        />
 
-        {/* Show preview of selected new image, or existing post image while editing */}
-        {(imagePreview || post?.featuredImage) && (
-          <div className="w-full mb-4">
-            <img
-              src={
-                imagePreview ||
-                dbService.getFileView(post.featuredImage)
-              }
-              alt={post?.title || "preview"}
-              className="rounded-lg"
-            />
-          </div>
-        )}
+      {/* Sidebar — right */}
+      <div className="w-full lg:w-80 space-y-5">
+        {/* Image upload card */}
+        <div className="bg-surface-1 rounded-lg border border-hairline p-5 space-y-4">
+          <h3 className="text-body-sm text-ink-muted font-medium">Featured Image</h3>
+          <Input
+            type="file"
+            accept="image/png, image/jpg, image/jpeg, image/gif"
+            {...register("image")}
+          />
 
-        <Select
-          options={["active", "inactive"]}
-          label="Status"
-          className="mb-4"
-          {...register("status", { required: true })}
-        />
-        <Button
-          type="submit"
-          bgColor={post ? "bg-green-500" : undefined}
-          className="w-full">
-          {post ? "Update" : "Submit"}
-        </Button>
+          {/* Show preview of selected new image, or existing post image while editing */}
+          {(imagePreview || post?.featuredImage) && (
+            <div className="w-full rounded-xl overflow-hidden border border-hairline">
+              <img
+                src={
+                  imagePreview ||
+                  dbService.getFileView(post.featuredImage)
+                }
+                alt={post?.title || "preview"}
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Settings card */}
+        <div className="bg-surface-1 rounded-lg border border-hairline p-5 space-y-4">
+          <h3 className="text-body-sm text-ink-muted font-medium">Settings</h3>
+          <Select
+            options={["active", "inactive"]}
+            label="Status"
+            {...register("status", { required: true })}
+          />
+          <Button
+            type="submit"
+            variant={post ? "primary" : "primary"}
+            className="w-full"
+          >
+            {post ? "Update Post" : "Publish Post"}
+          </Button>
+        </div>
       </div>
     </form>
   );

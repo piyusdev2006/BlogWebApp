@@ -24,13 +24,29 @@ function EditPost() {
         }
     }, [slug, navigate]);
     
-  return post ? (
-      <div className='py-8'>
-          <Container>
-              <PostForm post={post} />
-          </Container>
+  if (!post) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="loading-spinner" />
       </div>
-  ) : null;
+    );
+  }
+
+  return (
+    <div className='py-10 md:py-16 page-enter'>
+      <Container>
+        <div className="mb-8">
+          <p className="text-eyebrow text-primary uppercase tracking-widest mb-2">
+            Editing
+          </p>
+          <h1 className="text-headline text-ink font-display">
+            Edit post
+          </h1>
+        </div>
+        <PostForm post={post} />
+      </Container>
+    </div>
+  );
 }
 
 export default EditPost

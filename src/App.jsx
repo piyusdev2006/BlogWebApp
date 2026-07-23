@@ -23,17 +23,22 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  return !loading ? (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
-      <div className="w-full block">
-        <Header />
-        <main>
-          TODO: <Outlet />
-        </main>
-        <Footer />
+  return loading ? (
+    <div className="min-h-screen bg-canvas flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="loading-spinner" />
+        <span className="text-body-sm text-ink-subtle animate-pulse-soft">Loading...</span>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <div className="min-h-screen flex flex-col bg-canvas">
+      <Header />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

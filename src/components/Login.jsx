@@ -30,32 +30,36 @@ function Login() {
     }
 
     return (
-      <div className="flex items-center justify-center w-full">
-        <div
-          className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
-          <div className="mb-2 flex justify-center">
-            <span className="inline-block w-full max-w-[100px]">
-              <Logo width="100%" />
-            </span>
+      <div className="flex items-center justify-center w-full min-h-[70vh] page-enter">
+        <div className="mx-auto w-full max-w-md bg-surface-1 rounded-lg p-8 md:p-10 border border-hairline">
+          <div className="mb-6 flex justify-center">
+            <Logo width="140px" />
           </div>
 
-          <h2 className="text-center text-2xl font-bold leading-tight">
+          <h2 className="text-center text-headline text-ink font-display">
             Sign in to your account
           </h2>
 
-          <p className="mt-2 text-center text-base text-black/60">
+          <p className="mt-2 text-center text-body-sm text-ink-subtle">
             Don&apos;t have any account?&nbsp;
             <Link
               to="/signup"
-              className="font-medium text-primary transition-all duration-200 hover:underline">
+              className="font-medium text-primary transition-colors duration-200 hover:text-primary-hover"
+            >
               Sign Up
             </Link>
           </p>
-          {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
+
+          {error && (
+            <div className="mt-6 px-4 py-3 rounded-md bg-red-500/10 border border-red-500/20">
+              <p className="text-body-sm text-red-400 text-center">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(login)} className="mt-8">
             <div className="space-y-5">
               <Input
-                label="Email: "
+                label="Email"
                 placeholder="Enter your email"
                 type="email"
                 {...register("email", {
@@ -69,7 +73,7 @@ function Login() {
                 })}
               />
               <Input
-                label="Password: "
+                label="Password"
                 placeholder="Enter your password"
                 type="password"
                 {...register("password", {
@@ -81,7 +85,7 @@ function Login() {
                 })}
               />
               <Button type="submit" className="w-full">
-                Sign In/Login
+                Sign In
               </Button>
             </div>
           </form>

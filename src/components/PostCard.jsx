@@ -4,19 +4,26 @@ import { Link } from "react-router";
 
 function PostCard({ $id, title, featuredImage }) {
   return (
-    <Link to={`/post/${$id}`}>
-      <div className="w-full bg-gray-100 rounded-xl p-4">
-        <div className="w-full flex justify-center mb-4">
+    <Link to={`/post/${$id}`} className="block group">
+      <article className="bg-surface-1 rounded-lg border border-hairline overflow-hidden transition-all duration-300 hover:bg-surface-2 hover:border-hairline-strong hover:-translate-y-0.5">
+        {/* Image container */}
+        <div className="aspect-[16/10] overflow-hidden bg-surface-2">
           {featuredImage && (
             <img
               src={dbService.getFileView(featuredImage)}
               alt={title}
-              className="rounded-xl"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           )}
         </div>
-        <h2 className="text-xl font-bold">{title}</h2>
-      </div>
+
+        {/* Content */}
+        <div className="p-5">
+          <h2 className="text-card-title text-ink font-display line-clamp-2 group-hover:text-primary transition-colors duration-200">
+            {title}
+          </h2>
+        </div>
+      </article>
     </Link>
   );
 }

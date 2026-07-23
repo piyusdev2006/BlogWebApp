@@ -31,22 +31,28 @@ export default function Protected({ children, authentication = true })
   /*
      *  Isko AUR Aasan Kaise Banayein? (Code Clean Up)
      * useEffect(() => {
-  Scenario 1: Agar login zaroori hai, aur user logged in NAHI hai
-  if (authentication === true && authStatus === false) {
-    navigate("/login");
-  } 
-   Scenario 2: Agar login mana hai (like Login page), aur user PEHLE SE logged in hai
-  else if (authentication === false && authStatus === true) {
-    navigate("/");
-  }
+   Scenario 1: Agar login zaroori hai, aur user logged in NAHI hai
+   if (authentication === true && authStatus === false) {
+     navigate("/login");
+   } 
+    Scenario 2: Agar login mana hai (like Login page), aur user PEHLE SE logged in hai
+   else if (authentication === false && authStatus === true) {
+     navigate("/");
+   }
 
-    Check khatam, ab loading band karo aur page dikhao!
-    setLoader(false);
-}, [authStatus, navigate, authentication]);
+     Check khatam, ab loading band karo aur page dikhao!
+     setLoader(false);
+ }, [authStatus, navigate, authentication]);
 
 */
 
-  return loader ? <h1>Loading...</h1> : <>{children}</>;
+  return loader ? (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="loading-spinner"></div>
+    </div>
+  ) : (
+    <>{children}</>
+  );
 }
 
 
