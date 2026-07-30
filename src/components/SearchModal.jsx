@@ -62,19 +62,19 @@ export default function SearchModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-surface-1 rounded-xl border border-hairline shadow-2xl overflow-hidden"
+        className="w-full max-w-2xl bg-surface-1 rounded-xl border border-hairline shadow-2xl overflow-hidden ring-1 ring-white/10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}
-        <div className="flex items-center px-4 py-3 border-b border-hairline gap-3">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8f98" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex items-center px-4 py-3.5 border-b border-hairline gap-3 bg-surface-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5e6ad2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search documentation, articles, topics..."
+            placeholder="Type a command or search docs..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -83,58 +83,86 @@ export default function SearchModal({ isOpen, onClose }) {
             onKeyDown={handleKeyDown}
             className="w-full bg-transparent text-ink text-body font-body outline-none placeholder:text-ink-tertiary"
           />
-          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-mono text-ink-tertiary bg-surface-2 border border-hairline rounded">
+          <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-ink-tertiary bg-surface-2 border border-hairline rounded shadow-sm">
             ESC
           </kbd>
         </div>
 
-        {/* Search Results */}
-        <div className="max-h-[360px] overflow-y-auto p-2">
+        {/* Search Results Container */}
+        <div className="max-h-[380px] overflow-y-auto p-2">
           {loading ? (
-            <div className="py-10 text-center">
-              <div className="loading-spinner mx-auto mb-2" />
-              <p className="text-body-sm text-ink-subtle">Searching docs...</p>
+            <div className="py-12 text-center space-y-3">
+              <div className="loading-spinner mx-auto" />
+              <p className="text-body-sm text-ink-subtle">Searching documentation database...</p>
             </div>
           ) : filteredPosts.length === 0 ? (
-            <div className="py-10 text-center">
-              <p className="text-body-sm text-ink-subtle">No docs found matching "{query}"</p>
+            <div className="py-12 text-center space-y-2">
+              <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center mx-auto text-ink-tertiary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </div>
+              <p className="text-body-sm text-ink-muted">No documents found for "{query}"</p>
+              <p className="text-caption text-ink-tertiary">Try searching for keywords like 'React', 'Git', 'API', or 'Docker'</p>
             </div>
           ) : (
             <ul className="space-y-1">
-              {filteredPosts.map((post, idx) => (
-                <li
-                  key={post.$id}
-                  onClick={() => handleSelect(post.$id)}
-                  onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
-                    idx === selectedIndex ? "bg-surface-2 text-ink border border-hairline-strong" : "text-ink-subtle hover:bg-surface-2/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5e6ad2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    <span className="text-body-sm font-medium truncate">{post.title}</span>
-                  </div>
-                  <span className="text-caption text-ink-tertiary font-mono flex-shrink-0">
-                    Jump to →
-                  </span>
-                </li>
-              ))}
+              {filteredPosts.map((post, idx) => {
+                const isSelected = idx === selectedIndex;
+                return (
+                  <li
+                    key={post.$id}
+                    onClick={() => handleSelect(post.$id)}
+                    onMouseEnter={() => setSelectedIndex(idx)}
+                    className={`flex items-center justify-between px-3.5 py-3 rounded-lg cursor-pointer transition-all duration-150 ${
+                      isSelected
+                        ? "bg-surface-2 text-ink border border-primary/40 shadow-sm"
+                        : "text-ink-subtle hover:bg-surface-2/60 border border-transparent"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      <div className={`p-1.5 rounded-md border ${isSelected ? 'bg-primary/20 border-primary/40 text-primary' : 'bg-surface-2 border-hairline text-ink-tertiary'}`}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                      </div>
+                      <div className="truncate">
+                        <span className={`text-body-sm font-medium block truncate ${isSelected ? 'text-ink' : 'text-ink-subtle'}`}>
+                          {post.title}
+                        </span>
+                        {post.content && (
+                          <span className="text-caption text-ink-tertiary block truncate">
+                            {post.content.replace(/<[^>]+>/g, "").slice(0, 80)}...
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                      {isSelected && (
+                        <span className="text-[11px] font-mono text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20 hidden sm:inline-block">
+                          Jump to doc ↵
+                        </span>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="px-4 py-2 border-t border-hairline bg-surface-2/50 flex items-center justify-between text-caption text-ink-tertiary">
-          <div className="flex items-center gap-2">
-            <span><kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded">↑</kbd> <kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded">↓</kbd> to navigate</span>
-            <span><kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded">↵</kbd> to select</span>
+        {/* Footer info bar */}
+        <div className="px-4 py-2.5 border-t border-hairline bg-surface-2/40 flex items-center justify-between text-caption text-ink-tertiary font-mono">
+          <div className="flex items-center gap-3">
+            <span><kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded text-[10px]">↑</kbd> <kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded text-[10px]">↓</kbd> navigate</span>
+            <span><kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded text-[10px]">↵</kbd> open</span>
+            <span><kbd className="px-1.5 py-0.5 bg-surface-1 border border-hairline rounded text-[10px]">ESC</kbd> close</span>
           </div>
-          <span>Navi Docs Search</span>
+          <span className="hidden sm:inline">{filteredPosts.length} results</span>
         </div>
       </div>
     </div>
   );
 }
+

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Logo, LogoutBtn, SearchModal } from "../index.js";
-import { Link, useNavigate } from "react-router";
+import { Container, Logo, SearchModal } from "../index.js";
+import { Link, useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
+import AvatarDropdown from "../AvatarDropdown";
+import profileService from "../../appwriteServices/profileService";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.isLoggedIn);
+  const userData = useSelector((state) => state.auth.userData);
+  const profile = useSelector((state) => state.auth.profile);
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
 
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
@@ -28,12 +34,12 @@ function Header() {
       active: true,
     },
     {
-      name: "All Posts",
+      name: "Docs Library",
       slug: "/all-posts",
       active: authStatus,
     },
     {
-      name: "Add Post",
+      name: "+ Create Doc",
       slug: "/add-posts",
       active: authStatus,
     },
@@ -41,87 +47,105 @@ function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-canvas/80 backdrop-blur-xl border-b border-hairline">
+      <header className="sticky top-0 z-40 bg-canvas/85 backdrop-blur-xl border-b border-hairline transition-all">
         <Container>
-          <nav className="flex items-center justify-between h-14 gap-4">
+          <nav className="flex items-center justify-between h-16 gap-4">
             {/* Logo — left */}
             <div className="flex-shrink-0">
-              <Link to="/" className="block">
-                <Logo width="120px" />
+              <Link to="/" className="block hover:opacity-90 transition-opacity">
+                <Logo width="130px" />
               </Link>
             </div>
 
             {/* Search Trigger Button — Center/Left */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2.5 px-3 py-1.5 rounded-md bg-surface-1 border border-hairline text-ink-subtle hover:text-ink hover:bg-surface-2 transition-all duration-200 cursor-pointer w-48 sm:w-64"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-surface-1 border border-hairline text-ink-subtle hover:text-ink hover:bg-surface-2 hover:border-hairline-strong transition-all duration-200 cursor-pointer w-44 sm:w-64 md:w-80 group shadow-inner"
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 group-hover:text-primary transition-colors">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <span className="text-body-sm flex-1 text-left truncate">Search docs...</span>
-              <kbd className="hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-2 border border-hairline text-ink-tertiary">
-                Ctrl K
+              <span className="text-body-sm flex-1 text-left truncate">Search documentation...</span>
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-2 border border-hairline text-ink-tertiary">
+                <span className="text-[9px]">⌘</span>K
               </kbd>
             </button>
 
             {/* Desktop nav links */}
             <ul className="hidden md:flex items-center gap-1">
-              {navItems.map((item) =>
-                item.active ? (
+              {navItems.map((item) => {
+                if (!item.active) return null;
+                const isActive = location.pathname === item.slug;
+                return (
                   <li key={item.name}>
                     <button
                       onClick={() => navigate(item.slug)}
-                      className="px-3 py-1.5 rounded-md text-body-sm text-ink-subtle font-medium transition-colors duration-200 hover:text-ink hover:bg-surface-1 cursor-pointer"
+                      className={`px-3 py-1.5 rounded-lg text-body-sm font-medium transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? "bg-surface-2 text-primary border border-hairline-strong shadow-sm"
+                          : "text-ink-subtle hover:text-ink hover:bg-surface-1"
+                      }`}
                     >
                       {item.name}
                     </button>
                   </li>
-                ) : null
-              )}
+                );
+              })}
             </ul>
 
-            {/* Header Right: Social Icons + Auth */}
+            {/* Header Right: Auth */}
             <div className="hidden md:flex items-center gap-3">
-              {/* Social links */}
-              <div className="flex items-center gap-1.5 pr-2 border-r border-hairline text-ink-tertiary">
-                <a href="https://x.com/codewithpiyus" target="_blank" rel="noreferrer" className="p-1.5 rounded-md hover:text-ink hover:bg-surface-1 transition-colors" aria-label="X / Twitter">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                </a>
-                <a href="https://github.com/piyusdev2006" target="_blank" rel="noreferrer" className="p-1.5 rounded-md hover:text-ink hover:bg-surface-1 transition-colors" aria-label="GitHub">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                  </svg>
-                </a>
-              </div>
 
               {!authStatus ? (
                 <>
                   <button
                     onClick={() => navigate("/login")}
-                    className="px-[14px] py-[8px] rounded-md text-button font-medium text-ink bg-surface-1 border border-hairline transition-all duration-200 hover:bg-surface-2 hover:border-hairline-strong cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg text-button font-medium text-ink bg-surface-1 border border-hairline transition-all duration-200 hover:bg-surface-2 hover:border-hairline-strong cursor-pointer"
                   >
                     Sign In
                   </button>
                   <button
                     onClick={() => navigate("/signup")}
-                    className="px-[14px] py-[8px] rounded-md text-button font-medium text-on-primary bg-primary transition-all duration-200 hover:bg-primary-hover active:bg-primary-focus cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-lg text-button font-medium text-on-primary bg-primary transition-all duration-200 hover:bg-primary-hover active:bg-primary-focus shadow-md shadow-primary/20 cursor-pointer"
                   >
                     Get Started
                   </button>
                 </>
               ) : (
-                <LogoutBtn />
+                <div className="relative flex items-center gap-3">
+                  {/* Avatar button */}
+                  <button
+                    onClick={() => setAvatarOpen((v) => !v)}
+                    className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+                    aria-label="Open profile menu"
+                  >
+                    {profile?.avatarFileId ? (
+                      <img
+                        src={profileService.getAvatarUrl(profile.avatarFileId)}
+                        alt="Avatar"
+                        className="w-8 h-8 rounded-full object-cover ring-2 ring-hairline-strong hover:ring-primary/40 transition-all"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-[13px] hover:bg-primary/30 transition-colors">
+                        {(profile?.displayName || userData?.name || userData?.email || "U").slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink-tertiary">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown */}
+                  {avatarOpen && <AvatarDropdown onClose={() => setAvatarOpen(false)} />}
+                </div>
               )}
             </div>
 
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 rounded-md text-ink-subtle hover:text-ink hover:bg-surface-1 transition-colors cursor-pointer"
+              className="md:hidden p-2 rounded-lg text-ink-subtle hover:text-ink hover:bg-surface-1 transition-colors cursor-pointer border border-hairline"
               aria-label="Toggle menu"
             >
               {mobileOpen ? (
@@ -138,7 +162,7 @@ function Header() {
 
           {/* Mobile dropdown */}
           {mobileOpen && (
-            <div className="md:hidden border-t border-hairline py-3 animate-fade-in space-y-2">
+            <div className="md:hidden border-t border-hairline py-4 animate-fade-in space-y-3">
               <ul className="flex flex-col gap-1">
                 {navItems.map((item) =>
                   item.active ? (
@@ -148,7 +172,7 @@ function Header() {
                           navigate(item.slug);
                           setMobileOpen(false);
                         }}
-                        className="w-full text-left px-3 py-2 rounded-md text-body-sm text-ink-subtle font-medium transition-colors duration-200 hover:text-ink hover:bg-surface-1 cursor-pointer"
+                        className="w-full text-left px-3 py-2 rounded-lg text-body-sm text-ink-subtle font-medium transition-colors duration-200 hover:text-ink hover:bg-surface-1 cursor-pointer"
                       >
                         {item.name}
                       </button>
@@ -156,7 +180,7 @@ function Header() {
                   ) : null
                 )}
               </ul>
-              <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-hairline">
+              <div className="flex flex-col gap-2 pt-3 border-t border-hairline">
                 {!authStatus ? (
                   <>
                     <button
@@ -164,7 +188,7 @@ function Header() {
                         navigate("/login");
                         setMobileOpen(false);
                       }}
-                      className="w-full px-[14px] py-[8px] rounded-md text-button font-medium text-ink bg-surface-1 border border-hairline transition-all duration-200 hover:bg-surface-2 cursor-pointer"
+                      className="w-full px-4 py-2 rounded-lg text-button font-medium text-ink bg-surface-1 border border-hairline transition-all duration-200 hover:bg-surface-2 cursor-pointer"
                     >
                       Sign In
                     </button>
@@ -173,7 +197,7 @@ function Header() {
                         navigate("/signup");
                         setMobileOpen(false);
                       }}
-                      className="w-full px-[14px] py-[8px] rounded-md text-button font-medium text-on-primary bg-primary transition-all duration-200 hover:bg-primary-hover cursor-pointer"
+                      className="w-full px-4 py-2 rounded-lg text-button font-medium text-on-primary bg-primary transition-all duration-200 hover:bg-primary-hover cursor-pointer"
                     >
                       Get Started
                     </button>
@@ -194,3 +218,6 @@ function Header() {
 }
 
 export default Header;
+
+
+

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./App.css";
 import authService from "./appwriteServices/auth";
-import { login, logout } from "./store/authSlice";
+import profileService from "./appwriteServices/profileService";
+import { login, logout, setProfile } from "./store/authSlice";
 import { Footer, Header } from "./components";
 import { Outlet } from "react-router";
 
@@ -13,9 +14,17 @@ function App() {
   useEffect(() => {
     authService
       .getCurrentUser()
-      .then((userData) => {
+      .then(async (userData) => {
         if (userData) {
           dispatch(login({ userData }));
+          // Hydrate profile from DB — fail silently so app still loads
+          try {
+            const profile = await profileService.getProfile(userData.$id);
+            dispatch(setProfile(profile));
+          } catch (e) {
+            console.warn("Could not load profile:", e);
+            dispatch(setProfile(null));
+          }
         } else {
           dispatch(logout());
         }

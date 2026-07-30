@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import LinkExtension from '@tiptap/extension-link'
@@ -8,13 +9,13 @@ function TipTapToolbar({ editor }) {
   if (!editor) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5 p-2 bg-surface-2 border-b border-hairline text-ink-subtle select-none">
+    <div className="flex flex-wrap items-center gap-1.5 p-2.5 bg-surface-2/80 border-b border-hairline text-ink-subtle select-none">
       {/* Bold */}
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`px-2.5 py-1 rounded text-body-sm font-bold transition-colors cursor-pointer ${
-          editor.isActive('bold') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2.5 py-1 rounded text-body-sm font-bold transition-all cursor-pointer ${
+          editor.isActive('bold') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Bold (Ctrl+B)"
       >
@@ -25,8 +26,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`px-2.5 py-1 rounded text-body-sm italic transition-colors cursor-pointer ${
-          editor.isActive('italic') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2.5 py-1 rounded text-body-sm italic transition-all cursor-pointer ${
+          editor.isActive('italic') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Italic (Ctrl+I)"
       >
@@ -37,8 +38,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleStrike().run()}
-        className={`px-2.5 py-1 rounded text-body-sm line-through transition-colors cursor-pointer ${
-          editor.isActive('strike') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2.5 py-1 rounded text-body-sm line-through transition-all cursor-pointer ${
+          editor.isActive('strike') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Strikethrough"
       >
@@ -49,8 +50,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleCode().run()}
-        className={`px-2 py-1 rounded text-caption font-mono transition-colors cursor-pointer ${
-          editor.isActive('code') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption font-mono transition-all cursor-pointer ${
+          editor.isActive('code') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Inline Code"
       >
@@ -63,8 +64,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`px-2 py-1 rounded text-caption font-semibold transition-colors cursor-pointer ${
-          editor.isActive('heading', { level: 1 }) ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption font-semibold transition-all cursor-pointer ${
+          editor.isActive('heading', { level: 1 }) ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
       >
         H1
@@ -73,8 +74,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`px-2 py-1 rounded text-caption font-semibold transition-colors cursor-pointer ${
-          editor.isActive('heading', { level: 2 }) ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption font-semibold transition-all cursor-pointer ${
+          editor.isActive('heading', { level: 2 }) ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
       >
         H2
@@ -83,8 +84,8 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`px-2 py-1 rounded text-caption font-semibold transition-colors cursor-pointer ${
-          editor.isActive('heading', { level: 3 }) ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption font-semibold transition-all cursor-pointer ${
+          editor.isActive('heading', { level: 3 }) ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
       >
         H3
@@ -96,31 +97,31 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`px-2 py-1 rounded text-caption transition-colors cursor-pointer ${
-          editor.isActive('bulletList') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption transition-all cursor-pointer ${
+          editor.isActive('bulletList') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Bullet List"
       >
-        • List
+        • Bullet List
       </button>
 
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`px-2 py-1 rounded text-caption transition-colors cursor-pointer ${
-          editor.isActive('orderedList') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption transition-all cursor-pointer ${
+          editor.isActive('orderedList') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Numbered List"
       >
-        1. List
+        1. Numbered List
       </button>
 
       {/* Code block */}
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`px-2 py-1 rounded text-caption font-mono transition-colors cursor-pointer ${
-          editor.isActive('codeBlock') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2 py-1 rounded text-caption font-mono transition-all cursor-pointer ${
+          editor.isActive('codeBlock') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Code Block"
       >
@@ -131,12 +132,12 @@ function TipTapToolbar({ editor }) {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`px-2.5 py-1 rounded text-caption italic transition-colors cursor-pointer ${
-          editor.isActive('blockquote') ? 'bg-primary/20 text-primary border border-primary/30' : 'hover:text-ink hover:bg-surface-1'
+        className={`px-2.5 py-1 rounded text-caption italic transition-all cursor-pointer ${
+          editor.isActive('blockquote') ? 'bg-primary/20 text-primary border border-primary/40 shadow-sm' : 'hover:text-ink hover:bg-surface-1'
         }`}
         title="Quote"
       >
-        "Quote"
+        " Quote
       </button>
 
       <div className="w-px h-5 bg-hairline mx-1" />
@@ -178,7 +179,7 @@ function TipTapInner({ value, onChange }) {
     },
     editorProps: {
       attributes: {
-        class: "prose-content min-h-[350px] p-4 bg-surface-1 focus:outline-none text-ink font-body",
+        class: "prose-content min-h-[350px] p-5 bg-surface-1 focus:outline-none text-ink font-body rounded-b-xl",
       },
     },
   });
@@ -190,7 +191,7 @@ function TipTapInner({ value, onChange }) {
   }, [value, editor]);
 
   return (
-    <div className="w-full rounded-md overflow-hidden border border-hairline bg-surface-1">
+    <div className="w-full rounded-xl overflow-hidden border border-hairline bg-surface-1 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all shadow-inner">
       <TipTapToolbar editor={editor} />
       <EditorContent editor={editor} />
     </div>
@@ -216,3 +217,4 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
     </div>
   );
 }
+
