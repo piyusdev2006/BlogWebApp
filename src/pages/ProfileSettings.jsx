@@ -63,7 +63,7 @@ function ProfileSettings() {
     setSaving(true);
     try {
       // 1. Upload new avatar if selected
-      let avatarFileId = profile.avatarFileId ?? null;
+      let avatarFileId = profile?.avatarFileId ?? null;
       if (avatarFile) {
         try {
           if (avatarFileId) await profileService.deleteAvatar(avatarFileId);
