@@ -30,6 +30,9 @@ class ProfileService {
    * Works for ANY userId (public profiles).
    */
   async getProfile(userId) {
+    if (!config.appwriteProfilesCollectionId) {
+      return null;
+    }
     try {
       const doc = await this.databases.getDocument(
         config.appwriteDatabaseId,
@@ -55,6 +58,9 @@ class ProfileService {
    * Uses upsertDocument so it works whether the doc exists or not.
    */
   async saveProfile(userId, { displayName, username, bio, avatarFileId, role, socials }) {
+    if (!config.appwriteProfilesCollectionId) {
+      throw new Error("Profiles collection ID is not configured. Please set VITE_APPWRITE_PROFILES_COLLECTION_ID in your environment settings.");
+    }
     try {
       const data = {
         userId,
