@@ -59,7 +59,7 @@ class ProfileService {
    */
   async saveProfile(userId, { displayName, username, bio, avatarFileId, role, socials }) {
     if (!config.appwriteProfilesCollectionId) {
-      throw new Error("Profiles collection ID is not configured. Please set VITE_APPWRITE_PROFILES_COLLECTION_ID in your environment settings.");
+      throw new Error("Profile settings are currently disabled. Please set VITE_APPWRITE_PROFILES_COLLECTION_ID in your environment variables.");
     }
     try {
       const data = {
