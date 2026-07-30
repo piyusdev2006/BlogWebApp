@@ -43,21 +43,29 @@ export class DBService {
   }
 
   async updatePost(slug, { title, content, featuredImage, status, userId }) {
+    const data = { title, content, featuredImage, status, userId };
     try {
-      return await this.databases.upsertDocument(
+      return await this.databases.updateDocument(
         config.appwriteDatabaseId,
         config.appwriteCollectionId,
         slug,
-        {
-          title,
-          content,
-          featuredImage,
-          status,
-          userId,
-        },
+        data,
       );
     } catch (error) {
-      console.log("Appwrite service :: updatePost :: error", error);
+      // If PATCH is blocked by CORS preflight, fallback to DELETE + POST
+      try {
+        await this.databases.deleteDocument(
+          config.appwriteDatabaseId,
+          config.appwriteCollectionId,
+          slug,
+        );
+      } catch (_) {}
+      return await this.databases.createDocument(
+        config.appwriteDatabaseId,
+        config.appwriteCollectionId,
+        slug,
+        data,
+      );
     }
   }
 

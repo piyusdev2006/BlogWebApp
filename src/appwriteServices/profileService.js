@@ -72,17 +72,31 @@ class ProfileService {
         socials: JSON.stringify(socials ?? {}),
       };
 
-      const doc = await this.databases.upsertDocument(
-        config.appwriteDatabaseId,
-        config.appwriteProfilesCollectionId,
-        userId,          // documentId = userId
-        data,
-        [
-          Permission.read(Role.any()),           // anyone can read this profile
-          Permission.update(Role.user(userId)),   // only owner can update
-          Permission.delete(Role.user(userId)),   // only owner can delete
-        ]
-      );
+      const permissions = [
+        Permission.read(Role.any()),           // anyone can read this profile
+        Permission.update(Role.user(userId)),   // only owner can update
+        Permission.delete(Role.user(userId)),   // only owner can delete
+      ];
+
+      let doc;
+      try {
+        // 1. Try creating document for new user (POST)
+        doc = await this.databases.createDocument(
+          config.appwriteDatabaseId,
+          config.appwriteProfilesCollectionId,
+          userId,
+          data,
+          permissions
+        );
+      } catch (createErr) {
+        // 2. Document already exists (409 Conflict) -> Update existing document (PATCH)
+        doc = await this.databases.updateDocument(
+          config.appwriteDatabaseId,
+          config.appwriteProfilesCollectionId,
+          userId,
+          data
+        );
+      }
 
       const parsed = {
         ...doc,
