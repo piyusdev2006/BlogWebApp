@@ -81,18 +81,28 @@ function Login() {
                   },
                 })}
               />
-              <Input
-                label="Password"
-                placeholder="••••••••"
-                type="password"
-                {...register("password", {
-                  required: true,
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
-              />
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="text-body-sm text-ink-muted font-medium">Password</label>
+                  <Link
+                    to="/forgot-password"
+                    className="text-caption text-primary hover:text-primary-hover transition-colors"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+                <Input
+                  placeholder="••••••••"
+                  type="password"
+                  {...register("password", {
+                    required: true,
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+              </div>
               <Button type="submit" disabled={loading} className="w-full py-3">
                 {loading ? (
                   <span className="flex items-center gap-2">

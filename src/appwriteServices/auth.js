@@ -56,6 +56,42 @@ export class AuthService {
       console.log("Appwrite service :: logout :: error", error);
     }
   }
+
+  async sendVerification(url) {
+    try {
+      return await this.account.createVerification(url);
+    } catch (error) {
+      console.log("Appwrite service :: sendVerification :: error", error);
+      throw error;
+    }
+  }
+
+  async confirmVerification(userId, secret) {
+    try {
+      return await this.account.updateVerification(userId, secret);
+    } catch (error) {
+      console.log("Appwrite service :: confirmVerification :: error", error);
+      throw error;
+    }
+  }
+
+  async sendPasswordRecovery(email, url) {
+    try {
+      return await this.account.createRecovery(email, url);
+    } catch (error) {
+      console.log("Appwrite service :: sendPasswordRecovery :: error", error);
+      throw error;
+    }
+  }
+
+  async confirmPasswordReset(userId, secret, password) {
+    try {
+      return await this.account.updateRecovery(userId, secret, password);
+    } catch (error) {
+      console.log("Appwrite service :: confirmPasswordReset :: error", error);
+      throw error;
+    }
+  }
 }
 
 const authService = new AuthService();

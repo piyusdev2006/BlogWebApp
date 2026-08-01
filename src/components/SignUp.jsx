@@ -20,7 +20,16 @@ function SignUp() {
             const user = await authService.createAccount(data)
             if (user) {
                 const loggedUser = await authService.getCurrentUser()
-                if (loggedUser) dispatch(login({ userData: loggedUser }))
+                if (loggedUser) {
+                    dispatch(login({ userData: loggedUser }))
+                    // Send verification email
+                    try {
+                        const redirectUrl = `${window.location.origin}/verify-email`;
+                        await authService.sendVerification(redirectUrl);
+                    } catch (verifyErr) {
+                        console.log("Verification email trigger notice:", verifyErr);
+                    }
+                }
                 navigate("/")  
             }
         } catch (err) {
