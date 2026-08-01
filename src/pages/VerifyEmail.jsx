@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useSearchParams } from "react-router";
 import authService from "../appwriteServices/auth";
 import { Button, Logo } from "../components";
@@ -10,22 +10,38 @@ export default function VerifyEmail() {
 
   const [status, setStatus] = useState("verifying"); // 'verifying' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState("");
+  const isExecuting = useRef(false);
 
   useEffect(() => {
+    if (isExecuting.current) return;
+
     if (!userId || !secret) {
       setStatus("error");
       setErrorMessage("Invalid or missing email verification parameters in the URL.");
       return;
     }
 
+    isExecuting.current = true;
+
     authService
       .confirmVerification(userId, secret)
       .then(() => {
         setStatus("success");
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        // Fallback check: If the token was already consumed in previous attempt or user is verified
+        try {
+          const user = await authService.getCurrentUser();
+          if (user && user.emailVerification) {
+            setStatus("success");
+            return;
+          }
+        } catch (_) {}
+
         setStatus("error");
-        setErrorMessage(err.message || "Failed to verify email. Link may have expired.");
+        setErrorMessage(
+          err?.message || "Failed to verify email. The link may have already been used or expired."
+        );
       });
   }, [userId, secret]);
 
