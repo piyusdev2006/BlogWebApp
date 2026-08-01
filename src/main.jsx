@@ -59,11 +59,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/reset-password",
-        element: (
-          <Protected authentication = {false}>
-            <ResetPassword />
-          </Protected>
-        )
+        element: <ResetPassword />
       },
       {
         path: "/all-posts",
