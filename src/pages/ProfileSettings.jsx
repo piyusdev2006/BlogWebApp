@@ -116,6 +116,38 @@ function ProfileSettings() {
     }
   };
 
+  const [verifyingEmail, setVerifyingEmail] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
+
+  const handleResendVerification = async () => {
+    setVerifyingEmail(true);
+    try {
+      const redirectUrl = `${window.location.origin}/verify-email`;
+      await authService.sendVerification(redirectUrl);
+      notify("Verification email sent! Please check your inbox and spam folder.");
+    } catch (err) {
+      console.error("Resend verification error:", err);
+      notify(err?.message || "Failed to send verification email. Ensure domain is authorized in Appwrite console.", true);
+    } finally {
+      setVerifyingEmail(false);
+    }
+  };
+
+  const handleSendResetPassword = async () => {
+    if (!userData?.email) return;
+    setSendingReset(true);
+    try {
+      const redirectUrl = `${window.location.origin}/reset-password`;
+      await authService.sendPasswordRecovery(userData.email, redirectUrl);
+      notify("Password reset email sent! Please check your inbox and spam folder.");
+    } catch (err) {
+      console.error("Send password recovery error:", err);
+      notify(err?.message || "Failed to send password reset link.", true);
+    } finally {
+      setSendingReset(false);
+    }
+  };
+
   const displayName = profile?.displayName || userData?.name || userData?.email?.split("@")[0] || "User";
   const initials = displayName.slice(0, 2).toUpperCase();
   const isAdmin = profile?.role === "admin";
@@ -292,18 +324,31 @@ function ProfileSettings() {
                 <div className="space-y-6 animate-fade-in">
                   <div>
                     <h2 className="text-body font-semibold text-ink mb-1">Account Details</h2>
-                    <p className="text-body-sm text-ink-subtle mb-4">Your core Appwrite account details.</p>
+                    <p className="text-body-sm text-ink-subtle mb-4">Your core Appwrite account details and security options.</p>
                   </div>
 
                   <div className="p-4 rounded-xl border border-hairline bg-canvas space-y-4">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center flex-wrap gap-2">
                       <span className="text-body-sm text-ink-subtle">Email Address</span>
-                      <span className="text-body-sm font-medium text-ink">{userData?.email}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-body-sm font-medium text-ink">{userData?.email}</span>
+                        {userData?.emailVerification ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/10 border border-semantic-success/20 text-semantic-success text-[11px] font-semibold">
+                            ✓ Verified
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-semibold">
+                            ⚠️ Unverified
+                          </span>
+                        )}
+                      </div>
                     </div>
+
                     <div className="flex justify-between items-center">
                       <span className="text-body-sm text-ink-subtle">User ID</span>
                       <span className="text-body-sm font-mono text-ink-tertiary bg-surface-2 px-2 py-0.5 rounded">{userData?.$id}</span>
                     </div>
+
                     {isAdmin && (
                       <div className="flex justify-between items-center">
                         <span className="text-body-sm text-ink-subtle">Role</span>
@@ -314,8 +359,41 @@ function ProfileSettings() {
                     )}
                   </div>
 
-                  <div className="pt-4 mt-6 border-t border-hairline border-dashed">
-                    <p className="text-body-sm text-ink-subtle mb-3">To change your email or password, please contact support.</p>
+                  {/* Actions for Email Verification & Password Reset */}
+                  <div className="pt-4 border-t border-hairline space-y-4">
+                    <h3 className="text-body-sm font-semibold text-ink">Account Actions</h3>
+
+                    {!userData?.emailVerification && (
+                      <div className="flex items-center justify-between p-4 rounded-xl border border-hairline bg-canvas flex-wrap gap-3">
+                        <div>
+                          <p className="text-body-sm font-medium text-ink">Verify your email address</p>
+                          <p className="text-caption text-ink-subtle">Confirm your email to secure your account and access features.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleResendVerification}
+                          disabled={verifyingEmail}
+                          className="px-4 py-2 rounded-lg text-button font-medium bg-primary text-on-primary hover:bg-primary-hover transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          {verifyingEmail ? "Sending..." : "Resend Verification Email"}
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-hairline bg-canvas flex-wrap gap-3">
+                      <div>
+                        <p className="text-body-sm font-medium text-ink">Reset account password</p>
+                        <p className="text-caption text-ink-subtle">We will send a password recovery link to {userData?.email}.</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSendResetPassword}
+                        disabled={sendingReset}
+                        className="px-4 py-2 rounded-lg text-button font-medium bg-surface-2 text-ink border border-hairline hover:bg-surface-3 transition-colors disabled:opacity-50 cursor-pointer"
+                      >
+                        {sendingReset ? "Sending..." : "Send Reset Link"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
