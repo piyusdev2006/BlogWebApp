@@ -43,7 +43,7 @@ function Login() {
           </div>
 
           <h2 className="text-center text-headline text-ink font-display tracking-tight">
-            Sign in to Navi Docs
+            Sign in to CodeFolio
           </h2>
 
           <p className="mt-2 text-center text-body-sm text-ink-subtle">

@@ -80,7 +80,7 @@ CMD ["nginx", "-g", "daemon off;"]`
               {/* Eyebrow badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-2/80 border border-hairline text-caption font-mono text-primary shadow-sm backdrop-blur-md">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                Navi Docs — Technical Documentation Engine
+                CodeFolio — Developer Publishing Engine
               </div>
 
               {/* Main Headline */}
@@ -272,7 +272,7 @@ CMD ["nginx", "-g", "daemon off;"]`
                   Have a question or want to contribute a doc?
                 </h2>
                 <p className="text-body-sm text-ink-subtle max-w-xl leading-relaxed">
-                  Navi Docs is crafted for developers who love clean engineering. Join our community, share technical guides, or request new topic coverage.
+                  CodeFolio is crafted for developers who love clean engineering. Join our community, share technical guides, or publish high-impact posts.
                 </p>
               </div>
 

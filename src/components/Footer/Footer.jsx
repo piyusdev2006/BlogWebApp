@@ -123,7 +123,7 @@ function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-caption text-ink-tertiary">
-            &copy; {new Date().getFullYear()} Navi Docs. All rights reserved ❤️
+            &copy; {new Date().getFullYear()} CodeFolio. All rights reserved ❤️
           </p>
 
           {activeLinks.length > 0 && (

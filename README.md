@@ -1,4 +1,4 @@
-# 🚀 Navi Docs — Developer Documentation Platform
+# 🚀 CodeFolio — Developer Publishing & Portfolio Platform
 
 A modern, high-performance developer documentation and publishing platform inspired by the sleek dark aesthetics of **Linear** and **ChaiDocs**. Built with **React 19**, **Tailwind CSS**, **TipTap Block Editor**, and **Appwrite Cloud**.
 
@@ -31,7 +31,7 @@ A modern, high-performance developer documentation and publishing platform inspi
 
 ## 🏗️ System Architecture
 
-Navi Docs uses a clean, layered architecture separating UI, global state, routing, and backend API service abstractions.
+CodeFolio uses a clean, layered architecture separating UI, global state, routing, and backend API service abstractions.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐

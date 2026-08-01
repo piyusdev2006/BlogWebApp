@@ -33,7 +33,7 @@ function Logo({ width = "auto" }) {
         />
       </svg>
       <span className="font-display font-semibold text-ink text-[17px] tracking-tight whitespace-nowrap">
-        Navi Docs
+        CodeFolio
       </span>
     </div>
   );

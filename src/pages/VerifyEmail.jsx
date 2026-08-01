@@ -71,7 +71,7 @@ export default function VerifyEmail() {
             </div>
             <h2 className="text-headline text-ink font-display">Email Verified!</h2>
             <p className="text-body-sm text-ink-subtle">
-              Your account has been successfully verified. You now have full access to Navi Docs.
+              Your account has been successfully verified. You now have full access to CodeFolio.
             </p>
             <div className="pt-4">
               <Link to="/">

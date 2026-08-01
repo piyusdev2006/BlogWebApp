@@ -35,7 +35,7 @@ function PostCard({ $id, title, featuredImage, content, category = "Documentatio
                   <line x1="16" y1="13" x2="8" y2="13" />
                   <line x1="16" y1="17" x2="8" y2="17" />
                 </svg>
-                <span className="text-caption font-mono uppercase tracking-wider">Navi Doc</span>
+                <span className="text-caption font-mono uppercase tracking-wider">CodeFolio</span>
               </div>
             </div>
           )}
